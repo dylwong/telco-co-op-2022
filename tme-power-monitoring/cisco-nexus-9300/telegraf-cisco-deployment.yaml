@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-snmp
+  namespace: newton-idracs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-metrics
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: telegraf-metrics
+    spec:
+      containers:
+      # TODO: use custom image
+      - image: telegraf:1.22
+        #imagePullPolicy: Always
+        name: telegraf
+        ports:
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/telegraf/telegraf.conf
+          name: telegraf-config-volume
+          readOnly: true
+          subPath: telegraf.conf
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: telegraf-config
+        name: telegraf-config-volume
