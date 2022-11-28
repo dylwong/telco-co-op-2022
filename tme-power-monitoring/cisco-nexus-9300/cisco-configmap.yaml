@@ -1,0 +1,133 @@
+---
+#https://github.com/cisco/cisco-mibs/tree/main/v2
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: telegraf-metrics
+  name: telegraf-config
+  namespace: newton-ciscos
+data:
+  telegraf.conf: |-
+    [global_tags]
+      #namespace
+      newton_collector = "newton-ciscos"
+      smartops_datacenter = ""
+    [[processors.regex]]
+          [[processors.regex.fields]]
+            key = "log-dates"
+            pattern = "^(?P<YYYY>\\d{4})(?P<MM>\\d{2})(?P<DD>\\d{2})(?P<HH>\\d{2})(?P<mm>\\d{2})(?P<ss>\\d{2})\\.(?P<SSSSSS>\\d{6})(?P<ZZ>[-+]\\d{3,4})$"
+            replacement = "${YYYY}-${MM}-${DD} ${HH}:${mm}:${ss}"
+    [agent]
+      interval = "10s"
+      round_interval = true
+      metric_batch_size = 10000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      debug = false
+      quiet = false
+
+
+
+    [[inputs.snmp]]
+      #cisco switch ip's
+      agents = [ "192.168.52.7:161" ]
+
+      version = 2
+      #community string (authentication)
+      community = ""
+      [[inputs.snmp.field]]
+        name = "hostname"
+        oid = "1.3.6.1.4.1.9.9.109.1.1"
+        is_tag = true
+
+      [[inputs.snmp.field]]
+          name = "CPU1m"
+          oid = "1.3.6.1.4.1.9.9.109.1.1.1.1.7.1"
+      [[inputs.snmp.field]]
+          name = "MemUsed"
+          oid = "1.3.6.1.4.1.9.9.109.1.1.1.1.12.1"
+      [[inputs.snmp.field]]
+          name = "MemFree"
+          oid = "1.3.6.1.4.1.9.9.109.1.1.1.1.13.1"
+      [[inputs.snmp.field]]
+          oid = "RFC1213-MIB::sysName.0"
+          name = "source"
+          is_tag = true
+      [[inputs.snmp.table]]
+          name = "FRU"
+          inherit_tags = [ "source" ]
+          index_as_tag = true
+        [[inputs.snmp.table.field]]
+            name = "FAN_Status"
+            oid = "1.3.6.1.4.1.9.9.117.1.4.1.1.1"
+        [[inputs.snmp.table.field]]
+            name = "PSU_Status"
+            oid = "1.3.6.1.4.1.9.9.117.1.1.2.1.2"
+
+
+[[outputs.file]]
+    files = ["stdout", "/tmp/metrics.out"]
+[[outputs.prometheus_client]]
+    ## Address to listen on.
+    listen = "0.0.0.0:9090"
+    ## Use HTTP Basic Authentication.
+    # basic_username = "Foo"
+    # basic_password = "Bar"
+    metric_version = 2
+    ## If set, the IP Ranges which are allowed to access metrics.
+    ##   ex: ip_range = ["192.168.0.0/24", "192.168.1.0/30"]
+    # ip_range = []
+    ## Path to publish the metrics on.
+    path = "/metrics"
+    ## Expiration interval for each metric. 0 == no expiration
+    #expiration_interval = "0s"
+    ## Collectors to enable, valid entries are "gocollector" and "process".
+    ## If unset, both are enabled.
+    # collectors_exclude = ["gocollector", "process"]
+    ## Send string metrics as Prometheus labels.
+    ## Unless set to false all string metrics will be sent as labels.
+    # string_as_label = true
+    ## If set, enable TLS with the given certificate.
+    # tls_cert = "/etc/ssl/telegraf.crt"
+    # tls_key = "/etc/ssl/telegraf.key"
+    ## Export metric collection time.
+    export_timestamp = true
+
+
+    [[outputs.file]]
+      files = ["stdout", "/tmp/metrics.out"]
+
+    [[outputs.prometheus_client]]
+        ## Address to listen on.
+        listen = "0.0.0.0:9090"
+
+        ## Use HTTP Basic Authentication.
+        # basic_username = "Foo"
+        # basic_password = "Bar"
+        metric_version = 2
+        ## If set, the IP Ranges which are allowed to access metrics.
+        ##   ex: ip_range = ["192.168.0.0/24", "192.168.1.0/30"]
+        # ip_range = []
+
+        ## Path to publish the metrics on.
+        path = "/metrics"
+        string_as_label = true
+        ## Expiration interval for each metric. 0 == no expiration
+        #expiration_interval = "0s"
+
+        ## Collectors to enable, valid entries are "gocollector" and "process".
+        ## If unset, both are enabled.
+        # collectors_exclude = ["gocollector", "process"]
+
+        ## Send string metrics as Prometheus labels.
+        ## Unless set to false all string metrics will be sent as labels.
+        # string_as_label = true
+
+        ## If set, enable TLS with the given certificate.
+        # tls_cert = "/etc/ssl/telegraf.crt"
+        # tls_key = "/etc/ssl/telegraf.key"
+
+        ## Export metric collection time.
+        export_timestamp = true
