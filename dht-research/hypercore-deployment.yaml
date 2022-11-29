@@ -16,7 +16,6 @@ spec:
         app: hyperbeam-demo
     spec:
       containers:
-      # TODO: use custom image
       - image: hyperbeam:latest
         #imagePullPolicy: Always
         name: hyperbeam
