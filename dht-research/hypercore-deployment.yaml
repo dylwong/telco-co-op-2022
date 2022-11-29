@@ -33,6 +33,6 @@ spec:
       terminationGracePeriodSeconds: 30
       volumes:
       - configMap:
-          defaultMode: 420
+          defaultMode: 755
           name: hypercore-function
         name: hypercore-function-volume
