@@ -16,7 +16,7 @@ spec:
         app: hyperbeam-demo
     spec:
       containers:
-      - image: hyperbeam:latest
+      - image: hypered:latest
         #imagePullPolicy: Always
         name: hyperbeam
         ports:
