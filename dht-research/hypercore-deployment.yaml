@@ -25,14 +25,4 @@ spec:
           protocol: TCP
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
-        volumeMounts:
-        - mountPath: /etc/hypercore/function.py
-          name: hypercore-function-volume
-          readOnly: true
-          subPath: function.py
-      terminationGracePeriodSeconds: 30
-      volumes:
-      - configMap:
-          defaultMode: 755
-          name: hypercore-function
-        name: hypercore-function-volume
+
