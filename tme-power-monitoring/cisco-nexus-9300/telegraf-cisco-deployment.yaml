@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       # TODO: use custom image
-      - image: telegraf:1.24
+      - image: quay.io/dywong/telegraf-cisco:latest
         #imagePullPolicy: Always
         name: telegraf
         ports:
