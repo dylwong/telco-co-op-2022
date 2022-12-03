@@ -31,6 +31,18 @@ spec:
           name: telegraf-config-volume
           readOnly: true
           subPath: telegraf.conf
+        - mountPath: /usr/share/snmp/mibs/CISCO-PROCESS-MIB.txt
+          name: mib1
+          readOnly: true
+          subPath: CISCO-PROCESS-MIB.txt
+        - mountPath: /usr/share/snmp/mibs/CISCO-STP-EXTENSIONS-MIB.txt
+          name: mib2
+          readOnly: true
+          subPath: CISCO-STP-EXTENSIONS-MIB.txt
+        - mountPath: /usr/share/snmp/mibs/CISCO-STP-EXTENSIONS-MIB.txt
+          name: mib3
+          readOnly: true
+          subPath: CISCO-STP-EXTENSIONS-MIB.txt
       terminationGracePeriodSeconds: 30
       volumes:
       - configMap:
