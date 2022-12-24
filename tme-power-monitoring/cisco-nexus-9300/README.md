@@ -1,4 +1,4 @@
-```To deploy Telegraf with OpenShift Monitoring, you will need to create the following files:
+``To deploy Telegraf with OpenShift Monitoring, you will need to create the following files:
 
 Telegraf configuration file: This file specifies the input and output plugins that Telegraf will use to collect and send metrics. Here is an example Telegraf configuration file that collects metrics from the OpenShift Prometheus server and sends them to the InfluxDB database used by OpenShift Monitoring:
 Copy code
@@ -54,7 +54,7 @@ To deploy Telegraf with OpenShift Monitoring, you will need to create these file
 
 Here is an example Telegraf configuration file that collects metrics from a Cisco Nexus series device using SNMPv2:
 
-Copy code
+Copy code```
 [[inputs.snmp]]
   agents = [
     "udp:192.168.1.10:161"
@@ -69,7 +69,7 @@ Copy code
     "ifOutErrors",
     "ifInDiscards",
     "ifOutDiscards"
-  ]
+  ]```
 In this configuration file, the inputs.snmp plugin is used to collect metrics from a Cisco Nexus device with an IP address of 192.168.1.10 using SNMPv2 and the community string public. The field_drop and metrics options are used to specify which metrics to collect from the device. The tag_keys option is used to specify the tags that should be applied to the collected metrics.
 
-It is important to note that this configuration file is just an example, and you may need to adjust it to meet the specific requirements of your environment. For example, you may need to adjust the IP address of the Cisco Nexus device, the community string, or the metrics being collected.```
+It is important to note that this configuration file is just an example, and you may need to adjust it to meet the specific requirements of your environment. For example, you may need to adjust the IP address of the Cisco Nexus device, the community string, or the metrics being collected.``
